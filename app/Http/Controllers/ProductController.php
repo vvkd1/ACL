@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
     
 use App\Models\Product;
 use Illuminate\Http\Request;
+use DataTables;
+
     
 class ProductController extends Controller
 { 
@@ -106,4 +108,6 @@ class ProductController extends Controller
         return redirect()->route('products.index')
                         ->with('success','Product deleted successfully');
     }
+
+   
 }

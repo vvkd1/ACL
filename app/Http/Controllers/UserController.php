@@ -10,6 +10,7 @@ use DB;
 use Hash;
 use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
+use Elibyy\TCPDF\Facades\TCPDF;
 
 class UserController extends Controller
 {
@@ -87,8 +88,7 @@ class UserController extends Controller
         $user->assignRole($request->input('roles'));
 
         return redirect()->route('users.index')
-            ->with('success', 'User u
-            pdated successfully');
+            ->with('success', 'User updated successfully');
     }
 
     public function destroy($id)
@@ -98,8 +98,40 @@ class UserController extends Controller
             ->with('success', 'User deleted successfully');
     }
 
-    public function export() 
+    public function export()
     {
         return Excel::download(new UsersExport, 'omkar-pol.xlsx');
     }
+
+    public function tcpdf(Request $request)
+{
+    $filename = 'product.pdf';
+
+    $users = User::all(); 
+    
+    // $users = DB::table('users')
+    // ->where('id', '>', 3)
+    // ->orWhere('name', 'nishant')
+    // ->get();
+
+    // $data = [
+        
+    //     'users' => $users,
+    //     'title' => 'Generate PDF using Laravel TCPDF - scube!'
+    // ];
+   
+    $html = view('tcpdf', compact('users'))->render();
+
+    $pdf = new TCPDF;
+
+    $pdf::SetTitle('Hello World');
+    $pdf::AddPage();
+    $pdf::writeHTML($html, true, false, true, false, '');
+
+    $pdf::Output(public_path($filename), 'f');
+
+    return response()->download(public_path($filename));
+}
+
+
 }

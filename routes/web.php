@@ -36,3 +36,5 @@ Route::group(['middleware' => ['auth']], function() {
 });
 
 Route::get('/export', [UserController::class, 'export'])->name('export');
+Route::get('pdf', [UserController::class,'tcpdf']);
+
