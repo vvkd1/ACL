@@ -4,6 +4,7 @@
 
     <!-- Include necessary styles and scripts -->
 <div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>  
@@ -12,6 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
      <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap5.min.js"></script>
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </div>
 <div class="container">
 
@@ -19,9 +21,11 @@
         <div class="col-lg-12">
             <h2 class="pull-left">Users Management</h2>
             <div class="pull-right" style="margin-bottom: 15px; float:right;">
+             <a class="btn btn-outline-danger" href="/generatetcpdf">cell Pdf <i class="fas fa-file-pdf"></i></a>
             <a class="btn btn-outline-danger" href="/pdf">Pdf <i class="fas fa-file-pdf"></i></a>
                 <a class="btn btn-outline-success" href="/export">Export <i class="fas fa-file-export"></i></a>
-                <a class="btn btn-success" href="{{ route('users.create') }}">Create New User</a>
+                <a class="btn btn-success" href="{{ route('users.create') }}"><i class="fa-sharp fa-solid fa-plus" style="color: #fafafa; font-size:25px"></i></a>
+                
             </div>
         </div>
     </div>
@@ -79,6 +83,12 @@
     $(document).ready(function() {
         $('#myTable').DataTable();
     });
+</script>
+<script>
+$(document).ready(function() {
+    
+    $(".alert-success").fadeOut(2000);
+});
 </script>
 
 @endsection

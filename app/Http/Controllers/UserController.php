@@ -1,16 +1,19 @@
 <?php
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Exports\UsersExport;
 use Spatie\Permission\Models\Role;
-use DataTables;
+
 use DB;
 use Hash;
 use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
+
 use Elibyy\TCPDF\Facades\TCPDF;
+
 
 class UserController extends Controller
 {
@@ -98,40 +101,83 @@ class UserController extends Controller
             ->with('success', 'User deleted successfully');
     }
 
+
     public function export()
     {
         return Excel::download(new UsersExport, 'omkar-pol.xlsx');
     }
 
     public function tcpdf(Request $request)
-{
-    $filename = 'product.pdf';
+    {
+        $filename = 'users.pdf';
 
-    $users = User::all(); 
+        $users = User::all();
+
+        $html = view('tcpdf', compact('users'))->render();
+
+        $pdf = new TCPDF;
+
+        $pdf::SetTitle('Hello World');
+        $pdf::AddPage();
+
+        $pdf::writeHTML($html, true, false, true, false, '');
+
+        $pdf::Output(public_path($filename), 'f');
+
+        return response()->download(public_path($filename));
+
+    }
+
+
+
+    public function generateTcpdf()
+    {
+        $users = User::all();
+
+        // Create a new TCPDF instance
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+        // Add a page to the PDF
+        $pdf::AddPage();
+
+        // Set the font
+        $pdf::SetFont('times', '', 12);
+
+        // Header
+        $pdf::Cell(0, 10, 'User Details', 0, 1, 'C');
+        $pdf::Ln(); // Add a new line
+
+        // Create the table headers
+        $pdf::Cell(30, 10, 'ID', 1,0,'C');
+        $pdf::Cell(60, 10, 'Name', 1,0,'C');
+        $pdf::Cell(60, 10, 'Email', 1,0,'C');
+        $pdf::Cell(40, 10, 'Profile Image', 1,0,'C');
+        $pdf::Ln(); // Add a new line
+
+        // Create table rows with data
+        foreach ($users as $row) {
+            $pdf::Cell(30, 10, $row->id, 1, 0, 'C');
+            $pdf::Cell(60, 10, $row->name, 1, 0, 'C');
+            $pdf::Cell(60, 10, $row->email, 1, 0, 'C');
+
+            // Add an image using Image() method
+            $imagePath = '../resources/image/images.png'; // Update with the actual path to your image
+            $width = 20;
+            $height = 10;
+            
+            $pdf::Image($imagePath, $pdf::GetX(), $pdf::GetY(), $width, $height, 'png');
+            $pdf::Cell(40, 10, '', 1,0,'C'); // Create an empty cell for spacing
+
+            $pdf::Ln(); // Add a new line
+        }
+
+        // Output the PDF as inline (I) or for download (D)
+        return $pdf::Output('example.pdf', 'I');
+    }
     
-    // $users = DB::table('users')
-    // ->where('id', '>', 3)
-    // ->orWhere('name', 'nishant')
-    // ->get();
 
-    // $data = [
-        
-    //     'users' => $users,
-    //     'title' => 'Generate PDF using Laravel TCPDF - scube!'
-    // ];
-   
-    $html = view('tcpdf', compact('users'))->render();
 
-    $pdf = new TCPDF;
 
-    $pdf::SetTitle('Hello World');
-    $pdf::AddPage();
-    $pdf::writeHTML($html, true, false, true, false, '');
-
-    $pdf::Output(public_path($filename), 'f');
-
-    return response()->download(public_path($filename));
-}
 
 
 }

@@ -18,7 +18,7 @@
             </div>
             <div class="pull-right" style="float:right; margin-bottom:15px;">
                 @can('role-create')
-                <a class="btn btn-success" href="{{ route('roles.create') }}"> Create New Role</a>
+                <a class="btn btn-success" href="{{ route('roles.create') }}"> <i class="fa-sharp fa-solid fa-plus" style="color: #fafafa; font-size:25px"></i></a>
                 @endcan
             </div>
         </div>
@@ -66,5 +66,11 @@
     $(document).ready(function() {
         $('#myTable').DataTable();
     });
+</script>
+<script>
+$(document).ready(function() {
+    
+    $(".alert-success").fadeOut(2000);
+});
 </script>
 @endsection

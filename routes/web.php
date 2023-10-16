@@ -28,13 +28,22 @@ Route::get('/', function () {
 });
 Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-  
-Route::group(['middleware' => ['auth']], function() {
+
+Route::group(['middleware' => ['auth']], function () {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
-});
+
 
 Route::get('/export', [UserController::class, 'export'])->name('export');
-Route::get('pdf', [UserController::class,'tcpdf']);
+Route::get('/pdf', [UserController::class, 'tcpdf']);
 
+Route::get('/generatetcpdf', [UserController::class, 'generatetcpdf']);
+
+
+
+// Route::get('/', function () {
+//     return view('auth.login');
+// });
+
+});
