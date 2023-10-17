@@ -41,9 +41,7 @@ Route::get('/pdf', [UserController::class, 'tcpdf']);
 Route::get('/generatetcpdf', [UserController::class, 'generatetcpdf']);
 
 
-
-// Route::get('/', function () {
-//     return view('auth.login');
-// });
+   
+    
 
 });

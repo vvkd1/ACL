@@ -11,7 +11,7 @@ use DB;
 use Hash;
 use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
-
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Elibyy\TCPDF\Facades\TCPDF;
 
 
@@ -131,53 +131,59 @@ class UserController extends Controller
 
 
     public function generateTcpdf()
-    {
-        $users = User::all();
-
-        // Create a new TCPDF instance
-        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-        // Add a page to the PDF
-        $pdf::AddPage();
-
-        // Set the font
-        $pdf::SetFont('times', '', 12);
-
-        // Header
-        $pdf::Cell(0, 10, 'User Details', 0, 1, 'C');
+{
+    $users = User::all();
+    
+    // Create a new TCPDF instance
+    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    
+    // Add a page to the PDF
+    $pdf::AddPage();
+    
+    // Set the font
+    $pdf::SetFont('times', 'B', 12);
+    
+    // Header
+    $pdf::Cell(0, 10, 'User Details', 0, 1, 'C');
+    $pdf::Ln(); // Add a new line
+    
+    // Create the table headers
+    $pdf::Cell(30, 10, 'ID', 1, 0, 'C');
+    $pdf::Cell(60, 10, 'Name', 1, 0, 'C');
+    $pdf::Cell(60, 10, 'Email', 1, 0, 'C');
+    $pdf::Cell(40, 10, 'Profile Image', 1, 0, 'C');
+    $pdf::Ln(); // Add a new line
+    
+    // Create table rows with data and QR codes
+    foreach ($users as $row) {
+        $pdf::Cell(30, 10, $row->id, 1, 0, 'C');
+        $pdf::Cell(60, 10, $row->name, 1, 0, 'C');
+        $pdf::Cell(60, 10, $row->email, 1, 0, 'C');
+    
+        // Add an image using Image() method
+        $imagePath = '../resources/image/images.png'; // Update with the actual path to your image
+        $width = 20;
+        $height = 10;
+    
+        $pdf::Image($imagePath, $pdf::GetX(), $pdf::GetY(),$width, $height, 'png');
+    
+        // Calculate the position for the QR code at the bottom
+        $qrCodeY = $pdf::GetY() ; // Adjust the value as needed
+        $qrCodeX = $pdf::GetX();
+    
+        // Generate a QR code for user data
+        $qrCode = QrCode::size(20)->generate("User ID: $row->id\nName: $row->name\nEmail: $row->email");
+        $qrCodePath = public_path("qrcodes/user_{$row->id}.png");
+        $pdf::Image('@' . $qrCode, $qrCodeX, $qrCodeY, $width,  $height ); // Add QR code image
+    
+        $pdf::Cell(40, 10, '', 1, 0, 'C'); // Create an empty cell for spacing
         $pdf::Ln(); // Add a new line
-
-        // Create the table headers
-        $pdf::Cell(30, 10, 'ID', 1,0,'C');
-        $pdf::Cell(60, 10, 'Name', 1,0,'C');
-        $pdf::Cell(60, 10, 'Email', 1,0,'C');
-        $pdf::Cell(40, 10, 'Profile Image', 1,0,'C');
-        $pdf::Ln(); // Add a new line
-
-        // Create table rows with data
-        foreach ($users as $row) {
-            $pdf::Cell(30, 10, $row->id, 1, 0, 'C');
-            $pdf::Cell(60, 10, $row->name, 1, 0, 'C');
-            $pdf::Cell(60, 10, $row->email, 1, 0, 'C');
-
-            // Add an image using Image() method
-            $imagePath = '../resources/image/images.png'; // Update with the actual path to your image
-            $width = 20;
-            $height = 10;
-            
-            $pdf::Image($imagePath, $pdf::GetX(), $pdf::GetY(), $width, $height, 'png');
-            $pdf::Cell(40, 10, '', 1,0,'C'); // Create an empty cell for spacing
-
-            $pdf::Ln(); // Add a new line
-        }
-
-        // Output the PDF as inline (I) or for download (D)
-        return $pdf::Output('example.pdf', 'I');
     }
     
+    // Output the PDF as inline (I) or for download (D)
+    return $pdf::Output('user.pdf', 'I');
+}
 
-
-
-
+    
 
 }
