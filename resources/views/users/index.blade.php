@@ -21,11 +21,11 @@
         <div class="col-lg-12">
             <h2 class="pull-left">Users Management</h2>
             <div class="pull-right" style="margin-bottom: 15px; float:right;">
-             <a class="btn btn-outline-info" href="/QR-Code">QR <i class="fa-solid fa-arrow-down"></i></a>
-             <a class="btn btn-outline-danger" href="/generatetcpdf">cell Pdf <i class="fas fa-file-pdf"></i></a>
-            <a class="btn btn-outline-danger" href="/pdf">Pdf <i class="fas fa-file-pdf"></i></a>
-                <a class="btn btn-outline-success" href="/export">Export <i class="fas fa-file-export"></i></a>
-                <a class="btn btn-success" href="{{ route('users.create') }}"><i class="fa-sharp fa-solid fa-plus" style="color: #fafafa; font-size:25px"></i></a>
+             <a class="btn btn-outline-info" target="_blank" href="/QR-Code">QR <i class="fa-solid fa-arrow-down"></i></a>
+             <a class="btn btn-outline-danger" target="_blank" href="/generatetcpdf">cell Pdf <i class="fas fa-file-pdf"></i></a>
+            <a class="btn btn-outline-danger"  href="/pdf">Pdf <i class="fas fa-file-pdf"></i></a>
+                <a class="btn btn-outline-success"  href="/export">Export <i class="fas fa-file-export"></i></a>
+                <a class="btn btn-success"  href="{{ route('users.create') }}"><i class="fa-sharp fa-solid fa-plus" style="color: #fafafa; font-size:25px"></i></a>
                 
             </div>
         </div>

@@ -40,7 +40,10 @@ Route::get('/pdf', [UserController::class, 'tcpdf']);
 
 Route::get('/generatetcpdf', [UserController::class, 'generatetcpdf']);
 
+// Route::get('/QR-Code', function () {
 
+//     return view('QRCode');
+// });
    
     
 
