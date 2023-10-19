@@ -1,1 +1,1 @@
-{{-- {{QrCode::size(200)->generate('')}} --}}
+{{-- {{QrCode::size(200)->generate('hello')}} --}}

@@ -136,60 +136,283 @@ class UserController extends Controller
         // Create a new TCPDF instance
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf::AddPage();
-        $pdf::SetFont('times', '', 12);
+        $pdf::SetFont('times', 'b', 12);
 
         // Header
         $pdf::Cell(0, 11, 'User Details', 0, 1, 'C');
-        $pdf::Ln(); 
-        
+        $pdf::Ln();
+
 
         // Create the table headers
-        $pdf::Cell(30, 10, 'ID', 1, 0, 'C');
-        $pdf::Cell(30, 10, 'Name', 1, 0, 'C');
-        $pdf::Cell(40, 10, 'Email', 1, 0, 'C');
-        $pdf::Cell(40, 10, 'Profile Image', 1, 0, 'C');
-        $pdf::Ln(); 
+        $pdf::Cell(28, 10, 'ID', 1, 0, 'C');
+        $pdf::Cell(28, 10, 'Name', 1, 0, 'C');
+        $pdf::Cell(45, 10, 'Email', 1, 0, 'C');
+        $pdf::Cell(45, 10, 'Profile Image', 1, 0, 'C');
+        $pdf::Ln();
 
         // Create table rows with data and QR codes
         foreach ($users as $row) {
-            $pdf::Cell(30, 10, $row->id, 1, 0, 'C');
-            $pdf::Cell(30, 10, $row->name, 1, 0, 'C');
-            $pdf::Cell(40, 10, $row->email, 1, 0, 'C');
-            $pdf::Cell(40, 10, '', 1, '', 'C');
-            $imageX = $pdf::GetX();
-            $imageY = $pdf::GetY();
-           
-            $pdf::Image(public_path('/image/download.png'), $imageX + -20, $imageY + 1, 10, 8, 'PNG'); // Adjust the dimensions as needed
+            $pdf::Cell(28, 10, $row->id, 1, 0, 'C');
+            $pdf::Cell(28, 10, $row->name, 1, 0, 'C');
+            $pdf::Cell(45, 10, $row->email, 1, 0, 'C');
+            $pdf::Cell(45, 10, '', 1, '', 'C');
+            $imageX = $pdf::GetX(-20);
+            $imageY = $pdf::GetY(1);
+
+            $pdf::Image(public_path('/image/image2.webp'), $imageX + -23, $imageY + 1, 10, 8, ); // Adjust the dimensions as needed
             $pdf::Ln();
-            
+
         }
-         // set style for barcode
-         $style = array(
+        // set style for barcode
+        $style = array(
             'border' => 1,
             'vpadding' => 'auto',
             'hpadding' => 'auto',
-            'fgcolor' => array(0, 0, 0),
+            'fgcolor' => array(0, 0, 145),
             'bgcolor' => false,
             'module_width' => 1,
             // width of a single module in points
             'module_height' => 1 // height of a single module in points
         );
 
+        //  -----QR CODE-----
+        $pdf::write2DBarcode('dev harsh pvt ltd', 'QRCODE,L', 130, 130, 45, 45, $style, 'N');
 
-        $pdf::write2DBarcode('dev harsh pvt ltd', 'QRCODE,L', 150, 150, 40, 40, $style, 'N');
-        // $pdf::Text(20, 25, 'QRCODE L');
-       
-        
-        // $code = '111011101110111,010010001000010,010011001110010,010010000010010,010011101110010';
-        // $pdf::write2DBarcode($code, 'RAW', 100, 150, 40, 40, $style, 'N');
-        $code = '[111011101110111][010010001000010][010011001110010][010010000010010][010011101110010]';
-        $pdf::write2DBarcode($code, 'RAW2', 100, 150, 40, 40, $style, 'N');
 
-        $pdf::Ln(); 
+        // -----BARCODE-----  
+        $pdf::setBarcode(date('Y-m-d H:i:s'));
+        $pdf::SetFont('helvetica', '', 5);
+        $pdf::Cell(0, 0, 'CODE 39 + CHECKSUM', 0, 1);
+        $pdf::write1DBarcode('4502', 'C39+', '', '', '', 18, 0.4, $style, 'N');
+        $pdf::Ln();
+
+
         // Output the PDF as inline (I) or for download (D)
         return $pdf::Output('example.pdf', 'I');
     }
 
 
+    public function certificate()
+    {
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
+
+
+        $pdf::AddPage();
+        $pdf::SetFont('helvetica', 'B', 9.2);
+
+        //    ---BG IMAGE---
+        $imagePath1 = public_path('image/BG.jpeg');
+
+        $bMargin = $pdf::getBreakMargin();
+        $pdf::SetAutoPageBreak(false, 0);
+        // set bacground image
+        $pdf::Image($imagePath1, 0, 0, 210, 297, '', '', '', false, 300, '', false, false, 0);
+        $pdf::SetAutoPageBreak('', $bMargin);
+        $pdf::setPageMark();
+        $pdf::SetXY(0, 32);
+        $pdf::SetFont('helvetica', ' ', 17);
+        $pdf::Cell(0, 6, 'Semester Academic Report', 0, 1, 'C');
+        $pdf::Cell(0, 6, 'Spring 2020', 0, 1, 'C');
+        $pdf::Ln(2);
+
+        //  ---student NAME-----
+        $pdf::SetDrawColor(0, 0, 0);
+        $pdf::SetLineWidth(0.1);
+
+        $pdf::SetFont('helvetica', 'B', 9.4);
+        $pdf::Cell(36, 6, 'Student Name :', 0, 0, 'R');
+        $pdf::SetFont('helvetica', '', 9);
+        $pdf::SetX(45);
+        $pdf::Cell(11, 6, 'PRIYAANSH OJAS BHATT', 0, 1, 'L');
+
+        // ---student profile---
+        $imagePath1 = public_path('image/student.png');
+        $pdf::Image($imagePath1, 160, 45, 32, 34, );
+
+
+        //  ---student ID-----
+        $pdf::SetFont('helvetica', 'B', 9.4);
+        $pdf::Cell(36, 6, 'Student ID No :', 0, 0, 'R');
+        $pdf::SetFont('helvetica', '', 9);
+        $pdf::SetX(45);
+        $pdf::Cell(11, 6, '413906', 0, 0, 'L');
+
+
+        //  ---student Date of Birth :-----
+        $pdf::SetFont('helvetica', 'B', 9.4);
+        $pdf::Cell(62, 6, 'Date of Birth :', 0, 0, 'R');
+        $pdf::SetFont('helvetica', '', 9);
+        $pdf::SetX(45);
+        $pdf::Cell(93, 6, '10 June 2000', 0, 1, 'R');
+
+        //  ---student BATCH-----
+
+        $pdf::SetFont('helvetica', 'B', 9.4);
+        $pdf::Cell(36, 6, 'Batch :', 0, 0, 'R');
+        $pdf::SetFont('helvetica', '', 9);
+        $pdf::SetX(45);
+        $pdf::Cell(0, 6, '2018', 0, 0, 'L');
+
+
+        //  ---student Programme:-----
+
+        $pdf::SetFont('helvetica', 'B', 9.4);
+        $pdf::SetX(73);
+        $pdf::Cell(45, 6, 'Programme :', 0, 0, 'R');
+        $pdf::SetFont('helvetica', '', 9);
+        $pdf::SetX(45);
+        $pdf::Cell(102, 6, 'Bachelor of Design', 0, 1, 'R');
+
+
+
+        //  ---student Semester-----
+
+        $pdf::SetFont('helvetica', 'B', 9.4);
+        $pdf::Cell(36, 6, 'Semester :', 0, 0, 'R');
+        $pdf::SetFont('helvetica', '', 9);
+        $pdf::SetX(45);
+        $pdf::Cell(0, 6, 'Semester-IV', 0, 0, 'L');
+
+        //  ---student Major:-----
+        $pdf::SetFont('helvetica', 'B', 9.4);
+        $pdf::SetX(73);
+        $pdf::Cell(45, 6, 'Major :', 0, 0, 'R');
+        $pdf::SetFont('helvetica', '', 9);
+        $pdf::SetX(45);
+        $pdf::Cell(97, 6, 'Product Design', 0, 1, 'R');
+
+
+        //  ---student Report Issue Date:-----
+
+        $pdf::SetFont('helvetica', 'B', 9.2);
+        $pdf::Cell(36, 6, 'Report Issue Date :', 0, 0, 'R');
+        $pdf::SetFont('helvetica', '', 9);
+        $pdf::SetX(45);
+        $pdf::Cell(11, 6, ' 16 July 2022', 0, 1, 'L');
+        $pdf::Ln(3);
+
+        //  ---table----
+
+        $pdf::SetFont('helvetica', 'b', 9);
+        $pdf::Cell(23, 10, 'Course Code', 1, 0, 'C');
+        $pdf::Cell(75, 10, 'Course', 1, 0, 'C');
+        $pdf::Cell(28, 10, 'Credits Enrolled', 1, 0, 'C');
+        $pdf::Cell(28, 10, 'Credits Earned', 1, 0, 'C');
+        $pdf::Cell(13, 10, 'Grade', 1, 0, 'C');
+        $pdf::Cell(23, 10, 'Grade Points', 1, 1, 'C');
+
+
+        $pdf::SetFont('helvetica', '', 8.2);
+        $pdf::Cell(23, 10, 'PRO202', 'LR', 0, 'C');
+        $pdf::Cell(75, 10, 'ADVANCED MATERIALS & MANUFACTURING', 'LR', 0, 'C');
+        $pdf::Cell(28, 10, '3.0', 'LR', 0, 'C');
+        $pdf::Cell(28, 10, '3.0', 'LR', 0, 'C');
+        $pdf::Cell(13, 10, 'A+', 'LR', 0, 'C');
+        $pdf::Cell(23, 10, '4.00', 'LR', 1, 'C');
+
+        $pdf::Cell(23, 10, 'PRO203', 'LR', 0, 'C');
+        $pdf::Cell(75, 10, 'ERGONOMICS', 'LR', 0, 'C');
+        $pdf::Cell(28, 10, '3.0', 'LR', 0, 'C');
+        $pdf::Cell(28, 10, '3.0', 'LR', 0, 'C');
+        $pdf::Cell(13, 10, 'B+', 'LR', 0, 'C');
+        $pdf::Cell(23, 10, '3.45', 'LR', 1, 'C');
+
+
+        $pdf::Cell(23, 10, 'PRO246', 'LR', 0, 'C');
+        $pdf::Cell(75, 10, 'PRODUCT DESIGN STUDIO-II', 'LR', 0, 'C');
+        $pdf::Cell(28, 10, '6.0', 'LR', 0, 'C');
+        $pdf::Cell(28, 10, '6.0', 'LR', 0, 'C');
+        $pdf::Cell(13, 10, 'A', 'LR', 0, 'C');
+        $pdf::Cell(23, 10, '3.80', 'LR', 1, 'C');
+
+        $pdf::Cell(23, 10, 'PRO263', 'LR', 0, 'C');
+        $pdf::Cell(75, 10, ' PRODUCT DESIGN RENDERING', 'LR', 0, 'C');
+        $pdf::Cell(28, 10, '3.0', 'LR', 0, 'C');
+        $pdf::Cell(28, 10, '3.0', 'LR', 0, 'C');
+        $pdf::Cell(13, 10, 'B-', 'LR', 0, 'C');
+        $pdf::Cell(23, 10, '3.00', 'LR', 1, 'C');
+
+        $pdf::Cell(23, 10, 'DES243', 'LR', 0, 'C');
+        $pdf::Cell(75, 10, 'DESIGN OF LIVING CULTURE', 'LR', 0, 'C');
+        $pdf::Cell(28, 10, '2.0', 'LR', 0, 'C');
+        $pdf::Cell(28, 10, '0.0', 'LR', 0, 'C');
+        $pdf::Cell(13, 10, 'F', 'LR', 0, 'C');
+        $pdf::Cell(23, 10, '0.00', 'LR', 1, 'C');
+
+        $pdf::Cell(23, 10, 'EL2026', 'LR', 0, 'C');
+        $pdf::Cell(75, 10, 'MATERIAL INSIGHT (E)', 'LR', 0, 'C');
+        $pdf::Cell(28, 10, '2.0', 'LR', 0, 'C');
+        $pdf::Cell(28, 10, '2.0', 'LR', 0, 'C');
+        $pdf::Cell(13, 10, 'B+', 'LR', 0, 'C');
+        $pdf::Cell(23, 10, '3.45', 'LR', 1, 'C');
+
+
+        $pdf::Cell(23, 10, 'EL2036', 'LR', 0, 'C');
+        $pdf::Cell(75, 10, 'PACKAGING DESIGN (E)', 'LR', 0, 'C');
+        $pdf::Cell(28, 10, '2.0', 'LR', 0, 'C');
+        $pdf::Cell(28, 10, '2.0', 'LR', 0, 'C');
+        $pdf::Cell(13, 10, 'D', 'LR', 0, 'C');
+        $pdf::Cell(23, 10, '2.00', 'LR', 1, 'C');
+
+
+        $pdf::Cell(23, 55, '', 'LRB', 0, 'C');
+        $pdf::Cell(75, 55, '', 'LRB', 0, 'C');
+        $pdf::Cell(28, 55, '', 'LRB', 0, 'C');
+        $pdf::Cell(28, 55, '', 'LRB', 0, 'C');
+        $pdf::Cell(13, 55, '', 'LRB', 0, 'C');
+        $pdf::Cell(23, 55, '', 'LRB', 1, 'C');
+
+        $pdf::Ln(2);
+
+
+        // -----second table------
+
+        $pdf::Cell(95, 8, 'Semester Grade Point Average (SGPA)', 1, 0, 'C');
+        $pdf::Cell(95, 8, 'Cumulative Grade Point Average (CGPA)', 1, 1, 'C');
+
+        $pdf::Cell(25, 10, 'Earned Credits', 1, 0, 'C');
+        $pdf::Cell(45, 10, 'Earned Credit Points', 1, 0, 'C');
+        $pdf::SetFont('helvetica','B','8.2');
+        $pdf::Cell(30, 10, 'SGPA', 1, 0, 'C');
+        $pdf::SetFont('helvetica','','8.2');
+        $pdf::Cell(30, 10, 'Total Earned Credits', 1, 0, 'C');
+        $pdf::Cell(30, 10, 'Total Earned', 1, 0, 'C');
+        $pdf::SetFont('helvetica','B','8.2');
+        $pdf::Cell(30, 10, 'CGPA', 1, 1, 'C');
+
+        $pdf::SetFont('helvetica','','8.2');
+        $pdf::Cell(25, 11, '19.0', 1, 0, 'C');
+        $pdf::Cell(45, 11, '64.80', 1, 0, 'C');
+        $pdf::SetFont('helvetica','B','8.2');
+        $pdf::Cell(30, 11, '3.41', 1, 0, 'C');
+        $pdf::SetFont('helvetica','','8.2');
+        $pdf::Cell(30, 11, '75.0', 1, 0, 'C');
+        $pdf::Cell(30, 11, '240.70', 1, 0, 'C');
+        $pdf::SetFont('helvetica','B','8.2');
+        $pdf::Cell(30, 11, '3.27', 1, 0, 'C');
+        $pdf::SetFont('helvetica','B','8.2');
+
+
+        // ----QR Code-----
+        // new style
+        $pdf::SetFont('helvetica','','8.2');
+        $style = array(
+            'border' => false,
+            'vpadding' => 'auto',
+            'hpadding' => 'auto',
+            'fgcolor' => array(0,0,0),
+            'bgcolor' => false, //array(255,255,255)
+            'module_width' => 1, // width of a single module in points
+            'module_height' => 1 // height of a single module in points
+        );
+        
+        $pdf::write2DBarcode('NAME: PRIYAANSH OJAS BHATT, Student ID No : 413906, Date of Birth : 10 June 2000 ', 'QRCODE,H', 10, 252, 25, 23, $style, 'N');
+         $pdf::Text(15, 275, 'PD 00034 ');
+         $pdf::Text(45, 275, 'Controller of Examination');
+         $pdf::Text(135, 275, 'Registrar');
+         
+
+        $pdf::Output('Certificate.pdf', 'I');
+    }
 }

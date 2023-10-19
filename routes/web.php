@@ -39,11 +39,12 @@ Route::get('/export', [UserController::class, 'export'])->name('export');
 Route::get('/pdf', [UserController::class, 'tcpdf']);
 
 Route::get('/generatetcpdf', [UserController::class, 'generatetcpdf']);
+Route::get('/certificate', [UserController::class, 'certificate']);
 
-// Route::get('/QR-Code', function () {
+Route::get('/QR-Code', function () {
 
-//     return view('QRCode');
-// });
+    return view('QRCode');
+});
    
     
 
