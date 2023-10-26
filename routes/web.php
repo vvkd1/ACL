@@ -41,10 +41,8 @@ Route::get('/pdf', [UserController::class, 'tcpdf']);
 Route::get('/generatetcpdf', [UserController::class, 'generatetcpdf']);
 Route::get('/certificate', [UserController::class, 'certificate']);
 
-Route::get('/QR-Code', function () {
+Route::get('/import', [UserController::class, 'import'])->name('import');
 
-    return view('QRCode');
-});
    
     
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Exports\UsersExport;
+use App\Imports\UsersImport;
 use Spatie\Permission\Models\Role;
 
 use DB;
@@ -13,7 +14,7 @@ use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Elibyy\TCPDF\Facades\TCPDF;
-
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class UserController extends Controller
 {
@@ -104,7 +105,7 @@ class UserController extends Controller
 
     public function export()
     {
-        return Excel::download(new UsersExport, 'omkar-pol.xlsx');
+        return Excel::download(new UsersExport, 'user.xlsx');
     }
 
     public function tcpdf(Request $request)
@@ -295,101 +296,6 @@ class UserController extends Controller
         $pdf::Cell(11, 6, ' 16 July 2022', 0, 1, 'L');
         $pdf::Ln();
 
-        //  ---table----
-
-        // $pdf::SetFont('helvetica', 'b', 9);
-        // // $pdf::MultiCell(23, 10, 'Course Code', 1, 'C');
-        // // $pdf::MultiCell(23, 10, 'Course'. "\n".'Code', 1, 'C');
-
-        // $pdf::Cell(23, 10, 'Course Code', 1, 0, 'C');
-        // $pdf::Cell(75, 10, 'Course', 1, 0, 'C');
-        // $pdf::Cell(28, 10, 'Credits Enrolled', 1, 0, 'C');
-        // $pdf::Cell(28, 10, 'Credits Earned', 1, 0, 'C');
-        // $pdf::Cell(13, 10, 'Grade', 1, 0, 'C');
-        // $pdf::Cell(23, 10, 'Grade Points', 1, 1, 'C');
-
-
-        // $pdf::SetFont('helvetica', '', 9);
-        // $pdf::Cell(23, 10, 'PRO202', 'LR', 0, 'R');
-        // $pdf::Cell(75, 10, 'ADVANCED MATERIALS & MANUFACTURING', 'LR', 0, 'L');
-        // $pdf::Cell(28, 10, '3.0', 'LR', 0, 'C');
-        // $pdf::Cell(28, 10, '3.0', 'LR', 0, 'C');
-        // $pdf::Cell(13, 10, 'A+', 'LR', 0, 'C');
-        // $pdf::Cell(23, 10, '4.00', 'LR', 1, 'C');
-
-        // $pdf::Cell(23, 10, 'PRO203', 'LR', 0, 'R');
-        // $pdf::Cell(75, 10, 'ERGONOMICS', 'LR', 0, 'L');
-        // $pdf::Cell(28, 10, '3.0', 'LR', 0, 'C');
-        // $pdf::Cell(28, 10, '3.0', 'LR', 0, 'C');
-        // $pdf::Cell(13, 10, 'B+', 'LR', 0, 'C');
-        // $pdf::Cell(23, 10, '3.45', 'LR', 1, 'C');
-
-
-        // $pdf::Cell(23, 10, 'PRO246', 'LR', 0, 'R');
-        // $pdf::Cell(75, 10, 'PRODUCT DESIGN STUDIO-II', 'LR', 0, 'L');
-        // $pdf::Cell(28, 10, '6.0', 'LR', 0, 'C');
-        // $pdf::Cell(28, 10, '6.0', 'LR', 0, 'C');
-        // $pdf::Cell(13, 10, 'A', 'LR', 0, 'C');
-        // $pdf::Cell(23, 10, '3.80', 'LR', 1, 'C');
-
-        // $pdf::Cell(23, 10, 'PRO263', 'LR', 0, 'R');
-        // $pdf::Cell(75, 10, ' PRODUCT DESIGN RENDERING', 'LR', 0, 'L');
-        // $pdf::Cell(28, 10, '3.0', 'LR', 0, 'C');
-        // $pdf::Cell(28, 10, '3.0', 'LR', 0, 'C');
-        // $pdf::Cell(13, 10, 'B-', 'LR', 0, 'C');
-        // $pdf::Cell(23, 10, '3.00', 'LR', 1, 'C');
-
-        // $pdf::Cell(23, 10, 'DES243', 'LR', 0, 'R');
-        // $pdf::Cell(75, 10, 'DESIGN OF LIVING CULTURE', 'LR', 0, 'L');
-        // $pdf::Cell(28, 10, '2.0', 'LR', 0, 'C');
-        // $pdf::Cell(28, 10, '0.0', 'LR', 0, 'C');
-        // $pdf::Cell(13, 10, 'F', 'LR', 0, 'C');
-        // $pdf::Cell(23, 10, '0.00', 'LR', 1, 'C');
-
-        // $pdf::Cell(23, 10, 'EL2026', 'LR', 0, 'R');
-        // $pdf::Cell(75, 10, 'MATERIAL INSIGHT (E)', 'LR', 0, 'L');
-        // $pdf::Cell(28, 10, '2.0', 'LR', 0, 'C');
-        // $pdf::Cell(28, 10, '2.0', 'LR', 0, 'C');
-        // $pdf::Cell(13, 10, 'B+', 'LR', 0, 'C');
-        // $pdf::Cell(23, 10, '3.45', 'LR', 1, 'C');
-
-
-        // $pdf::Cell(23, 10, 'EL2036', 'LR', 0, 'R');
-        // $pdf::Cell(75, 10, 'PACKAGING DESIGN (E)', 'LR', 0, 'L');
-        // $pdf::Cell(28, 10, '2.0', 'LR', 0, 'C');
-        // $pdf::Cell(28, 10, '2.0', 'LR', 0, 'C');
-        // $pdf::Cell(13, 10, 'D', 'LR', 0, 'C');
-        // $pdf::Cell(23, 10, '2.00', 'LR', 1, 'C');
-
-
-        // $pdf::Cell(23, 50, '', 'LRB', 0, 'C');
-        // $pdf::Cell(75, 50, '', 'LRB', 0, 'C');
-        // $pdf::Cell(28, 50, '', 'LRB', 0, 'C');
-        // $pdf::Cell(28, 50, '', 'LRB', 0, 'C');
-        // $pdf::Cell(13, 50, '', 'LRB', 0, 'C');
-        // $pdf::Cell(23, 50, '', 'LRB', 1, 'C');
-        // $pdf::Ln(2);
-
-
-
-        // $columnWidths = [22, 96, 17,17,17,17];
-        // $alignData=['R','L','C','C','C','C'];
-        // // Set initial x and y coordinates
-        //   $x = 12;
-        //   $y = 83;
-        //   $pdf::SetFont('helvetica', 'BI', 10);
-        //   $columnBorder=['TLB','TLB','TLB','TLB','TLB','TLRB'];
-        // $columnNames = ['Course Code', 'Course', 'Credit Enrolled','Credit Earned','Grade','Grade Point'];
-        // $pdf::SetXY(12,83);    
-
-        // foreach ($columnNames as $key=> $name) {
-
-        //     $pdf::MultiCell($columnWidths[$key], 10, $name,$columnBorder[$key], 'C');
-
-
-        //     $x += $columnWidths[$key]; 
-        //     $pdf::SetXY($x, $y);  
-        // }
 
 
         // Table data
@@ -402,6 +308,7 @@ class UserController extends Controller
             array('DES243', 'DESIGN OF LIVING CULTURE', '2.0', '0.0', 'F', '0.00'),
             array('EL2026', 'MATERIAL INSIGHT (E)', '2.0', '2.0', 'B+', '3.40'),
             array('EL2029', 'PACKAGING DESIGN (E)', '2.0', '2.0', 'D', '2.00'),
+
         );
 
         // Set font
@@ -418,25 +325,25 @@ class UserController extends Controller
         // Create table header with left and right borders
         foreach ($headers as $index => $header) {
             $pdf::SetXY($x, $y);
-        
+
             $alignment = ($index === 0) ? 'C' : (($index === 1) ? 'C' : 'C');
-            
-           
-            $pdf::MultiCell($columnWidths[$index], $cellHeight, $header, 'LRTB', $alignment);
-        
+
+
+            $pdf::MultiCell($columnWidths[$index], $cellHeight, $header, 'LRTB', $alignment, 0, 1, '', '', true, 0, false, true, 11, 'M');
+
             // Calculate the height for vertical centering
             $textHeight = $pdf::getStringHeight($columnWidths[$index], $header);
             $verticalCenter = ($cellHeight - $textHeight) / 2;
-        
+
             // Adjust the Y position for vertical centering
             $pdf::SetXY($x, $y + $verticalCenter);
-        
+
             $x += $columnWidths[$index];
         }
-        
+
         $x = 10; // Reset x position
         $y += $cellHeight;
-        
+
         $pdf::SetFont('helvetica', '', 9);
         // Create table rows with left and right borders
         $rightAlign = true;
@@ -446,7 +353,7 @@ class UserController extends Controller
                 $pdf::SetXY($x, $y);
                 $border = ($index === 0) ? 'LR' : 'LR';
                 $alignment = ($index === 0) ? 'R' : (($index === 1) ? 'L' : 'C');
-                $pdf::MultiCell($columnWidths[$index], $cellHeight, $cell, $border, $alignment);
+                $pdf::MultiCell($columnWidths[$index], $cellHeight, $cell, $border, $alignment, 0, 1, '', '', true, 0, false, true, 11, 'M');
                 $x += $columnWidths[$index];
             }
             $y += $cellHeight;
@@ -461,34 +368,49 @@ class UserController extends Controller
         $pdf::Cell(17, 50, '', 'LRB', 1, 'C');
         $pdf::Ln(2);
 
-        //    -----second table------
-        $pdf::SetX(12);
-        $pdf::Cell(93, 8, 'Semester Grade Point Average (SGPA)', 1, 0, 'C');
-        $pdf::Cell(93, 8, 'Cumulative Grade Point Average (CGPA)', 1, 1, 'C');
 
-        $pdf::SetX(12);
-        $pdf::Cell(25, 10, 'Earned Credits', 1, 0, 'C');
-        $pdf::Cell(44, 10, 'Earned Credit Points', 1, 0, 'C');
-        $pdf::SetFont('helvetica', 'B', '9');
-        $pdf::Cell(29, 10, 'SGPA', 1, 0, 'C');
-        $pdf::SetFont('helvetica', '', '9');
-        $pdf::Cell(30, 10, 'Total Earned Credits', 1, 0, 'C');
-        $pdf::Cell(29, 10, 'Total Earned', 1, 0, 'C');
-        $pdf::SetFont('helvetica', 'B', '9');
-        $pdf::Cell(29, 10, 'CGPA', 1, 1, 'C');
 
-        $pdf::SetX(12);
         $pdf::SetFont('helvetica', '', '9');
-        $pdf::Cell(25, 11, '19.0', 1, 0, 'C');
-        $pdf::Cell(44, 11, '64.80', 1, 0, 'C');
+        $pdf::SetXY(12, 218);
+        // $pdf::MultiCell(93,8,'Semester Grade Point Average (SGPA)',1,'C',$verticalAlignment);
+        $pdf::MultiCell(93, 8, 'Semester Grade Point Average (SGPA)', 1, 'C', 0, 1, '', '', true, 0, false, true, 8, 'M');
+        $pdf::SetXY(105, 218);
+        $pdf::MultiCell(93, 8, 'Cumulative Grade Point Average (CGPA)', 1, 'C', 0, 1, '', '', true, 0, false, true, 8, 'M');
+
+        $pdf::SetXY(12, 226);
+        $pdf::MultiCell(30, 11, 'Earned Credits', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+        $pdf::SetFont('dejavusans', '', '7.9');
+        $pdf::SetXY(42, 226);
+        $pdf::MultiCell(36, 11, 'Earned Credit Points' . "\n" . 'Σ(Credit X Grade Points)', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
         $pdf::SetFont('helvetica', 'B', '9');
-        $pdf::Cell(29, 11, '3.41', 1, 0, 'C');
+        $pdf::SetXY(78, 226);
+        $pdf::MultiCell(30, 11, 'SGPA', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
         $pdf::SetFont('helvetica', '', '9');
-        $pdf::Cell(30, 11, '75.0', 1, 0, 'C');
-        $pdf::Cell(29, 11, '240.70', 1, 0, 'C');
+        $pdf::SetXY(108, 226);
+        $pdf::MultiCell(30, 11, 'Total' . "\n" . 'Earned Credits ', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+        $pdf::SetXY(138, 226);
+        $pdf::MultiCell(30, 11, 'Total Earned' . "\n" . 'Credit Points', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+        $pdf::SetXY(168, 226);
         $pdf::SetFont('helvetica', 'B', '9');
-        $pdf::Cell(29, 11, '3.27', 1, 0, 'C');
+        $pdf::MultiCell(30, 11, 'CGPA', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+
+        $pdf::SetFont('helvetica', '', '9');
+        $pdf::SetXY(12, 237);
+        $pdf::MultiCell(30, 11, '19.0', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+        $pdf::SetXY(42, 237);
+        $pdf::MultiCell(36, 11, '64.80', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
         $pdf::SetFont('helvetica', 'B', '9');
+        $pdf::SetXY(78, 237);
+        $pdf::MultiCell(30, 11, '3.41' . "\n" . 'Very Good', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+        $pdf::SetFont('helvetica', '', '9');
+        $pdf::SetXY(108, 237);
+        $pdf::MultiCell(30, 11, '75.0', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+        $pdf::SetXY(138, 237);
+        $pdf::MultiCell(30, 11, '240.70', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+        $pdf::SetFont('helvetica', 'B', '9');
+        $pdf::SetXY(168, 237);
+        $pdf::MultiCell(30, 11, '3.27' . "\n" . 'Very Good', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+
 
         // ----QR Code-----
 
@@ -505,13 +427,257 @@ class UserController extends Controller
             'module_height' => 1
         );
 
-        $pdf::write2DBarcode('NAME: PRIYAANSH OJAS BHATT ', 'QRCODE,H', 10, 252, 25, 23, $style, 'N');
+        $pdf::write2DBarcode('NAME: PRIYAANSH OJAS BHATT ', 'QRCODE,H', 10, 252, 28, 23, $style, 'N');
         $pdf::Text(15, 275, 'PD 00034 ');
         $pdf::Text(45, 275, 'Controller of Examination');
         $pdf::Text(135, 275, 'Registrar');
 
-
-
         $pdf::Output('Certificate.pdf', 'I');
     }
+
+
+    public function import(Request $request)
+    {
+
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf::AddPage();
+        $pdf::SetFont('helvetica', 'B', 9.2);
+
+        //    ---BG IMAGE---
+        $imagePath1 = public_path('image/BG.jpeg');
+
+        $bMargin = $pdf::getBreakMargin();
+        $pdf::SetAutoPageBreak(false, 0);
+
+        // set bacground image
+        $pdf::Image($imagePath1, 0, 0, 210, 297, '', '', '', false, 300, '', false, false, 0);
+        $pdf::SetAutoPageBreak('', $bMargin);
+        $pdf::setPageMark();
+
+        // PAGE HEADER
+        $spreadsheet = IOFactory::load(public_path('excel_file/GC_Sample.xlsx'));
+        $worksheet = $spreadsheet->getActiveSheet();
+        $data = $worksheet->toArray();
+        dd($data);
+
+        // Initialize a flag to skip the first row (header)
+        $skipFirstRow = true;
+
+        foreach ($data as $row) {
+            // Skip the first row (header)
+            if ($skipFirstRow) {
+                $skipFirstRow = false;
+                continue;
+            }
+            $pdf::setFont('helvetica', 'I', 15);
+            $pdf::SetXY(65, 35);
+            $pdf::MultiCell(75, 11, 'Semester Academic Report', 0, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(65, 42);
+            $pdf::MultiCell(75, 11, 'Spring 2020', 0, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+
+            //    student name
+            $pdf::setFont('helvetica', 'B', 9.2);
+            $pdf::SetXY(23, 52);
+            $pdf::Cell(25, 11, 'Student Name :', 0, 'C');
+            $pdf::setFont('helvetica', '', 9.2);
+            $pdf::SetXY(48, 52);
+            $pdf::Cell(20, 11, $row[2], 0, 'C');
+            $pdf::Ln(10);
+            $pdf::SetXY(64, 52);
+            $pdf::Cell(20, 11, $row[3], 0, 'C');
+
+            //student id
+            $pdf::setFont('helvetica', 'B', 9.2);
+            $pdf::SetXY(23, 58);
+            $pdf::Cell(25, 11, 'Student ID No :', 0, 'C');
+            $pdf::setFont('helvetica', '', 9.2);
+            $pdf::SetXY(48, 58);
+            $pdf::Cell(20, 11, $row[1], 0, 'C');
+
+            //batch
+            $pdf::setFont('helvetica', 'B', 9.2);
+            $pdf::SetXY(35.3, 64);
+            $pdf::Cell(12, 11, 'Batch :', 0, 'C');
+            $pdf::setFont('helvetica', '', 9.2);
+            $pdf::SetXY(48, 64);
+            $pdf::Cell(20, 11, $row[8], 0, 'C');
+
+            //semester
+            $pdf::setFont('helvetica', 'B', 9.2);
+            $pdf::SetXY(29.5, 70);
+            $pdf::Cell(18, 11, 'Semester :', 0, 'C');
+            $pdf::setFont('helvetica', '', 9.2);
+            $pdf::SetXY(48, 70);
+            $pdf::Cell(20, 11, $row[9], 0, 'C');
+
+            //issue date
+            $pdf::setFont('helvetica', 'B', 9.2);
+            $pdf::SetXY(16.5, 76);
+            $pdf::Cell(32, 11, 'Report Issue Date :', 0, 'C');
+            $pdf::setFont('helvetica', '', 9.2);
+            $pdf::SetXY(48, 76);
+            $pdf::Cell(20, 11, $row[130], 0, 'C');
+
+            // Date of Birth
+            $pdf::setFont('helvetica', 'B', 9.2);
+            $pdf::SetXY(82, 58);
+            $pdf::Cell(32, 11, 'Date of Birth :', 0, 'C');
+            $pdf::SetXY(105, 58);
+            $pdf::setFont('helvetica', '', 9.2);
+            $pdf::Cell(32, 11, $row[5], 0, 'C');
+            
+            // programme
+            $pdf::setFont('helvetica', 'B', 9.2);
+            $pdf::SetXY(83, 64);
+            $pdf::Cell(32, 11, 'Programme :', 0, 'C');
+            $pdf::setFont('helvetica', '', 9.2);
+            $pdf::SetXY(105, 64);
+            $pdf::Cell(32, 11, $row[10], 0, 'C');
+
+            //major
+            $pdf::setFont('helvetica', 'B', 9.2);
+            $pdf::SetXY(92.5, 70);
+            $pdf::Cell(32, 11, 'Major :', 0, 'C');
+            $pdf::setFont('helvetica', '', 9.2);
+            $pdf::SetXY(105, 70);
+            $pdf::Cell(32, 11, $row[11], 0, 'C');
+
+
+             //table header
+            $pdf::setFont('helvetica', 'B', 9.2);
+            $pdf::SetXY(12, 90);
+            $pdf::MultiCell(22, 11, 'Course' . "\n" . 'Code', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(34, 90);
+            $pdf::MultiCell(96, 11, 'Course', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(130, 90);
+            $pdf::MultiCell(17, 11, 'Credit' . "\n" . 'Enrolled', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(147, 90);
+            $pdf::MultiCell(17, 11, 'Credit' . "\n" . 'Earned', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(164, 90);
+            $pdf::MultiCell(17, 11, 'Grade ', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(181, 90);
+            $pdf::MultiCell(17, 11, 'Grade' . "\n" . 'Point', 1, 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+
+
+
+            // table data
+            $pdf::setFont('helvetica', '', 9.2);
+            $pdf::SetXY(12, 101);
+            $pdf::MultiCell(22, 11, $row[30], 'LR', 'R', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(34, 101);
+            $pdf::MultiCell(96, 11, $row[31], 'LR', 'L', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(130, 101);
+            $pdf::MultiCell(17, 11, $row[32], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(147, 101);
+            $pdf::MultiCell(17, 11, $row[33], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(164, 101);
+            $pdf::MultiCell(17, 11, $row[34], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(181, 101);
+            $pdf::MultiCell(17, 11, $row[35], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+
+
+            $pdf::SetXY(12, 112);
+            $pdf::MultiCell(22, 11, $row[36], 'LR', 'R', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(34, 112);
+            $pdf::MultiCell(96, 11, $row[37], 'LR', 'L', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(130, 112);
+            $pdf::MultiCell(17, 11, $row[38], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(147, 112);
+            $pdf::MultiCell(17, 11, $row[39], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(164, 112);
+            $pdf::MultiCell(17, 11, $row[40], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(181, 112);
+            $pdf::MultiCell(17, 11, $row[41], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+
+            $pdf::SetXY(12, 123);
+            $pdf::MultiCell(22, 11, $row[42], 'LR', 'R', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(34, 123);
+            $pdf::MultiCell(96, 11, $row[43], 'LR', 'L', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(130, 123);
+            $pdf::MultiCell(17, 11, $row[44], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(147, 123);
+            $pdf::MultiCell(17, 11, $row[45], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(164, 123);
+            $pdf::MultiCell(17, 11, $row[46], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(181, 123);
+            $pdf::MultiCell(17, 11, $row[47], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+
+
+            $pdf::SetXY(12, 134);
+            $pdf::MultiCell(22, 11, $row[48], 'LR', 'R', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(34, 134);
+            $pdf::MultiCell(96, 11, $row[49], 'LR', 'L', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(130, 134);
+            $pdf::MultiCell(17, 11, $row[50], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(147, 134);
+            $pdf::MultiCell(17, 11, $row[51], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(164, 134);
+            $pdf::MultiCell(17, 11, $row[52], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(181, 134);
+            $pdf::MultiCell(17, 11, $row[53], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+
+
+
+            $pdf::SetXY(12, 145);
+            $pdf::MultiCell(22, 11, $row[54], 'LR', 'R', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(34, 145);
+            $pdf::MultiCell(96, 11, $row[55], 'LR', 'L', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(130, 145);
+            $pdf::MultiCell(17, 11, $row[56], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(147, 145);
+            $pdf::MultiCell(17, 11, $row[57], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(164, 145);
+            $pdf::MultiCell(17, 11, $row[58], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(181, 145);
+            $pdf::MultiCell(17, 11, $row[59], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+
+
+            $pdf::SetXY(12, 156);
+            $pdf::MultiCell(22, 11, $row[60], 'LR', 'R', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(34, 156);
+            $pdf::MultiCell(96, 11, $row[61], 'LR', 'L', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(130, 156);
+            $pdf::MultiCell(17, 11, $row[62], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(147, 156);
+            $pdf::MultiCell(17, 11, $row[63], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(164, 156);
+            $pdf::MultiCell(17, 11, $row[64], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(181, 156);
+            $pdf::MultiCell(17, 11, $row[65], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+
+            $pdf::SetXY(12, 167);
+            $pdf::MultiCell(22, 11, $row[66], 'LR', 'R', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(34, 167);
+            $pdf::MultiCell(96, 11, $row[67], 'LR', 'L', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(130, 167);
+            $pdf::MultiCell(17, 11, $row[68], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(147, 167);
+            $pdf::MultiCell(17, 11, $row[69], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(164, 167);
+            $pdf::MultiCell(17, 11, $row[70], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(181, 167);
+            $pdf::MultiCell(17, 11, $row[71], 'LR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+
+
+            $pdf::SetXY(12, 168);
+            $pdf::MultiCell(22, 40, '', 'LBR', 'R', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(34, 168);
+            $pdf::MultiCell(96, 40, '', 'LBR', 'L', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(130, 168);
+            $pdf::MultiCell(17, 40, '', 'LBR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(147, 168);
+            $pdf::MultiCell(17, 40, '', 'LBR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(164, 168);
+            $pdf::MultiCell(17, 40, '', 'LBR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+            $pdf::SetXY(181, 168);
+            $pdf::MultiCell(17, 40, '', 'LBR', 'C', 0, 1, '', '', true, 0, false, true, 11, 'M');
+
+
+        }
+
+        $pdf::Output('450113_Ashlesha Anchan_Semester-I_M18_FNDN_Marksheet.pdf', 'I');
+    }
+
+
+
 }

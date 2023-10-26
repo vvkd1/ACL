@@ -15,14 +15,14 @@ class UsersExport implements FromCollection
     {
         return User::all();
     }
-    public function headings(): array
-    {
-        return [
-            'id',
-            'name',
-            'email',
+    // public function headings(): array
+    // {
+    //     return [
+    //         'id',
+    //         'name',
+    //         'email',
 
-            // Add more columns as needed
-        ];
-    }
+    //         // Add more columns as needed
+    //     ];
+    // }
 }
