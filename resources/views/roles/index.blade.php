@@ -40,23 +40,26 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($roles as $key => $role)
-        <tr class='text-center'>
-            <td >{{ ++$i }}</td>
-            <td>{{ $role->name }}</td>
-            <td>
-                <a class="btn btn-outline-warning btn-sm" href="{{ route('roles.show', $role->id) }}">Show</a>
-                @can('role-edit')
+       @foreach ($roles as $key => $role)
+    <tr class='text-center'>
+        <td>{{ ++$i }}</td>
+        <td>{{ $role->name }}</td>
+        <td>
+            <a class="btn btn-outline-warning btn-sm" href="{{ route('roles.show', $role->id) }}">Show</a>
+            @can('role-edit')
                 <a class="btn btn-outline-success btn-sm" href="{{ route('roles.edit', $role->id) }}">Edit</a>
-                @endcan
-                @can('role-delete')
-                {!! Form::open(['method' => 'DELETE', 'route' => ['roles.destroy', $role->id], 'style' => 'display:inline']) !!}
-                {!! Form::submit('Delete', ['class' => 'btn btn-outline-danger btn-sm']) !!}
-                {!! Form::close() !!}
-                @endcan
-            </td>
-        </tr>
-        @endforeach
+            @endcan
+            @can('role-delete')
+                <form action="{{ route('roles.destroy', $role->id) }}" method="POST" style="display: inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                </form>
+            @endcan
+        </td>
+    </tr>
+@endforeach
+
     </tbody>
 </table>
 {!! $roles->render() !!}

@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ImportController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\MailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,14 +38,16 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 Route::get('/export', [UserController::class, 'export'])->name('export');
-Route::get('/pdf', [UserController::class, 'tcpdf']);
 
 Route::get('/generatetcpdf', [UserController::class, 'generatetcpdf']);
 Route::get('/certificate', [UserController::class, 'certificate']);
 
-Route::get('/import', [UserController::class, 'import'])->name('import');
+Route::get('/import', [ImportController::class, 'import'])->name('import');
 
-   
-    
+Route::get('/importt', [ImportController::class, 'index']);
+Route::post('/import-excel', [ImportController::class, 'uploadExcel'])->name('import.excel');
+
+Route::get('send-mail', [MailController::class, 'index']);
+
 
 });
