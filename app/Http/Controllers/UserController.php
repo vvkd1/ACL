@@ -153,6 +153,7 @@ class UserController extends Controller
         );
 
         //  -----QR CODE-----
+        
         $pdf->write2DBarcode('dev harsh pvt ltd', 'QRCODE,L', 130, 130, 45, 45, $style, 'N');
 
 

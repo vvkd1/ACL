@@ -21,9 +21,9 @@
         <div class="col-lg-12">
             <h2 class="pull-left">Users Management</h2>
             <div class="pull-right" style="margin-bottom: 15px; float:right;">
-                <a class="btn btn-outline-warning" target="_blank" href="/send-mail">Send Mail <i class="fa-solid fa-arrow-down"></i></a>
-                <a class="btn btn-outline-dark" target="_blank" href="/importt">Imports file <i class="fa-solid fa-arrow-down"></i></a>
-                <a class="btn btn-outline-info" target="_blank" href="/import">Imports certificate<i class="fa-solid fa-arrow-down"></i></a>
+                <a class="btn btn-outline-warning" target="_blank" href="/send-mail">Send Mail<i class="fa-regular fa-paper-plane"></i></a>
+                <a class="btn btn-outline-dark" target="_blank" href="/importt">Imports file <i class="fa-sharp fa-solid fa-file-arrow-up"></i></a>
+                <a class="btn btn-outline-info" target="_blank" href="/import">Imports certificate <i class="fa-sharp fa-solid fa-file-arrow-up"></i></a>
                 <a class="btn btn-outline-danger" target="_blank" href="/certificate">certificate <i class="fa-solid fa-arrow-down"></i></a>
                 {{-- <a class="btn btn-outline-danger" target="_blank" href="/generatetcpdf">cell Pdf <i class="fas fa-file-pdf"></i></a> --}}
                 <a class="btn btn-outline-success" href="/export">Export <i class="fas fa-file-export"></i></a>

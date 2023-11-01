@@ -15,15 +15,11 @@ class MailController extends Controller
         
         $mailData = [
             'title' => 'Mail from ItSolutionStuff.com',
-            'body' => 'This is for testing email using smtp.'
+            'body' => 'This is testing email body.'
         ];
          
-        Mail::to('vivekdubey5500@gmail.com')->send(new MailableName($mailData));
+        Mail::to('dev4@scube.net.in')->send(new MailableName($mailData));
            
-     
-        echo "<script> alert('Email is sent successfully.') </script>";
-
-
-    
+        return redirect()->back()->with('success', 'Email has been sent successfully!');
     }
 }
